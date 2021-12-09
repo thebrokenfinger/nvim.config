@@ -10,6 +10,10 @@ set ttyfast
 set lazyredraw
 set synmaxcol=500
 set laststatus=2
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set smartindent
 " set relativenumber " Relative line numbers
 set number " Also show current absolute line
 set diffopt+=iwhite " No whitespace in vimdiff
@@ -60,10 +64,6 @@ if has("nvim")
 endif
 
 call plug#end()
-
-" calls for plugins
-" battery.vim
-call dein#add('lambdalisue/battery.vim')
 
 if has('nvim')
     set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:block-Cursor/rCursor-blinkon1,r-cr:hor20-Cursor/lCursor

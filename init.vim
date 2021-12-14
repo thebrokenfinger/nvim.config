@@ -5,6 +5,7 @@ call plug#begin()
   Plug 'vim-airline/vim-airline-themes'
   Plug 'preservim/nerdtree'
   Plug 'airblade/vim-gitgutter'
+  Plug 'jiangmiao/auto-pairs'
   Plug 'junegunn/goyo.vim'
   Plug 'vifm/vifm.vim'
   Plug 'rust-lang/rust.vim'

@@ -9,6 +9,7 @@ call plug#begin()
   Plug 'junegunn/goyo.vim'
   Plug 'vifm/vifm.vim'
   Plug 'rust-lang/rust.vim'
+  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Syntax
   Plug 'tpope/vim-markdown'
@@ -83,6 +84,14 @@ let g:rustfmt_emit_files = 1
 let g:rustfmt_fail_silently = 0
 let g:rust_clip_command = 'xclip -selection clipboard'
 
+" go config
+" Golang
+let g:go_play_open_browser = 0
+let g:go_fmt_fail_silently = 1
+let g:go_fmt_command = "goimports"
+let g:go_bin_path = expand("~/dev/go/bin")
+
+" other global config
 let g:airline_theme='dark'
 let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-emmet', 'coc-html', 'coc-graphql', 'coc-prettier', 'coc-tsserver', 'coc-rust-analyzer', 'coc-toml', 'coc-yaml', 'coc-tailwindcss', 'coc-eslint']
 let g:NERDTreeDirArrowExpandable = '+'

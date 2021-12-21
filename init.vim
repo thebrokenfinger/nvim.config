@@ -1,23 +1,26 @@
 " ---------------------------------- Plugins (VimPlug) -----------------------
 call plug#begin()
 " Tools
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'preservim/nerdtree'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'jiangmiao/auto-pairs'
-  Plug 'junegunn/goyo.vim'
-  Plug 'vifm/vifm.vim'
-  Plug 'rust-lang/rust.vim'
-  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'preservim/nerdtree'
+Plug 'airblade/vim-gitgutter'
+Plug 'jiangmiao/auto-pairs'
+Plug 'junegunn/goyo.vim'
+Plug 'vifm/vifm.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-rails' " Ruby on Rails support
+Plug 'dense-analysis/ale'
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Syntax
-  Plug 'tpope/vim-markdown'
-  Plug 'ap/vim-css-color'
+Plug 'tpope/vim-markdown'
+Plug 'ap/vim-css-color'
 " Color-schemes
-  Plug 'dracula/vim', { 'name': 'dracula' }
-  Plug 'morhetz/gruvbox'
-  Plug 'rakr/vim-one'
+Plug 'dracula/vim', { 'name': 'dracula' }
+Plug 'morhetz/gruvbox'
+Plug 'rakr/vim-one'
 call plug#end()
 
 " ---------------------------------- General Settings ------------------------
@@ -77,6 +80,9 @@ nnoremap <C-k> :tabnext<CR>
 xnoremap K :move '<-2<CR>gv-gv
 xnoremap J :move '>+1<CR>gv-gv
 
+autocmd FileType rust nnoremap <buffer> <C-o> :! cargo run<CR>
+autocmd FileType rust nnoremap <buffer> <C-o> :! go run main.go<CR>
+
 " --------------------------------------- Variable setup ----------------------------
 " rust config
 let g:rustfmt_autosave = 1
@@ -93,15 +99,43 @@ let g:go_bin_path = expand("~/dev/go/bin")
 
 " other global config
 let g:airline_theme='dark'
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-emmet', 'coc-html', 'coc-graphql', 'coc-prettier', 'coc-tsserver', 'coc-rust-analyzer', 'coc-toml', 'coc-yaml', 'coc-tailwindcss', 'coc-eslint']
+let g:deoplete#enable_at_startup=1
+
+" language client config
+let g:LanguageClient_serverCommands = {
+            \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+            \ }
+
+" coc.nvim config
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-emmet', 'coc-html', 'coc-graphql', 'coc-prettier', 'coc-tsserver', 'coc-rust-analyzer', 'coc-toml', 'coc-yaml', 'coc-tailwindcss', 'coc-eslint', 'coc-go']
+
+" ALE config
+let g:ale_linters = {
+            \ 'ruby': ['standardrb', 'rubocop'],     
+            \ 'javascript': ['eslint'],
+            \ 'typescript': ['eslint'],
+            \ 'typescriptreact': ['eslint'],
+            \} 
+let g:ale_fixers = {
+            \ 'ruby': ['standardrb'],
+            \ 'javascript': ['prettier'],
+            \ 'typescript': ['prettier'],
+            \ 'typescriptreact': ['prettier'],
+            \ 'css': ['prettier'],
+            \ 'graphql': ['prettier'],
+            \ 'markdown': ['prettier'],
+            \}
+let g:ale_fix_on_save=1
+
+" NerdTree config
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
 
 " Function to setup command alias
 function! SetupCommandAbbrs(from, to)
-  exec 'cnoreabbrev <expr> '.a:from
-        \ .' ((getcmdtype() ==# ":" && getcmdline() ==# "'.a:from.'")'
-        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+    exec 'cnoreabbrev <expr> '.a:from
+                \ .' ((getcmdtype() ==# ":" && getcmdline() ==# "'.a:from.'")'
+                \ .'? ("'.a:to.'") : ("'.a:from.'"))'
 endfunction
 
 " Alias for config commands

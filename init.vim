@@ -80,8 +80,12 @@ nnoremap <C-k> :tabnext<CR>
 xnoremap K :move '<-2<CR>gv-gv
 xnoremap J :move '>+1<CR>gv-gv
 
+" C — File in buffer
+map <F8> : !gcc % && ./a.out <CR>
+
+" Rust — Build and run cargo package (project)
 autocmd FileType rust nnoremap <buffer> <C-o> :! cargo run<CR>
-autocmd FileType rust nnoremap <buffer> <C-o> :! go run main.go<CR>
+autocmd FileType rust nnoremap <buffer> <C-i> :! rustc % --out-dir out && ./out/%:t:r<CR>
 
 " --------------------------------------- Variable setup ----------------------------
 " rust config
@@ -99,6 +103,7 @@ let g:go_bin_path = expand("~/dev/go/bin")
 
 " other global config
 let g:airline_theme='dark'
+let g:goyo_width=100
 let g:deoplete#enable_at_startup=1
 
 " language client config

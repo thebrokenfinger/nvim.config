@@ -1,3 +1,5 @@
+let mapleader = "\<Space>"
+
 " ---------------------------------- Plugins (VimPlug) -----------------------
 call plug#begin()
 " Tools
@@ -7,6 +9,10 @@ Plug 'preservim/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/goyo.vim'
+" Fuzzy Finder
+Plug 'airblade/vim-rooter'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'vifm/vifm.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
@@ -17,6 +23,7 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Syntax
 Plug 'tpope/vim-markdown'
 Plug 'ap/vim-css-color'
+Plug 'mustache/vim-mustache-handlebars'
 " Color-schemes
 Plug 'dracula/vim', { 'name': 'dracula' }
 Plug 'morhetz/gruvbox'
@@ -66,6 +73,29 @@ if has('nvim')
     noremap <C-q> :confirm qall<CR>
 end
 
+" <leader>s for Rg search
+noremap <leader>s :Rg
+let g:fzf_layout = { 'down': '~20%' }
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+function! s:list_cmd()
+  let base = fnamemodify(expand('%'), ':h:.:S')
+  return base == '.' ? 'fd --type file --follow' : printf('fd --type file --follow | proximity-sort %s', shellescape(expand('%')))
+endfunction
+
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd(),
+  \                               'options': '--tiebreak=index'}, <bang>0)
+
+
+" Open new file adjacent to current file
+nnoremap <leader>o :e <C-R>=expand("%:p:h") . "/" <CR>
+
 " ----------------------------------------- Key maps -------------------------------
 map <SPACE> :EditVifm .<CR>
 map <ENTER> :Goyo<CR>
@@ -108,7 +138,6 @@ let g:deoplete#enable_at_startup=1
 
 " language client config
 let g:LanguageClient_serverCommands = {
-            \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
             \ }
 
 " coc.nvim config
